@@ -19,12 +19,22 @@ def ons(state):
         n2 = state.istack.pop()
         state.istack.push(n2 + n1)
     state.on('+', n_addition)
+    
+    def n_plusone(state):
+        n1 = state.istack.pop()
+        state.istack.push(n1 + 1)
+    state.on('1+', n_plusone)
 
     def n_subtraction(state):
         n1 = state.istack.pop()
         n2 = state.istack.pop()
         state.istack.push(n2 - n1)
     state.on('-', n_subtraction)
+
+    def n_minusone(state):
+        n1 = state.istack.pop()
+        state.istack.push(n1 - 1)
+    state.on('1-', n_minusone)
 
     def n_multiplication(state):
         n1 = state.istack.pop()
@@ -57,17 +67,32 @@ def ons(state):
         state.istack.push(TRUE if n2 == n1 else FALSE)
     state.on('=', n_equal)
 
+    def n_equalzero(state):
+        n1 = state.istack.pop()
+        state.istack.push(TRUE if n1 == 0 else FALSE)
+    state.on('0=', n_equalzero)
+
     def n_lessthan(state):
         n1 = state.istack.pop()
         n2 = state.istack.pop()
         state.istack.push(TRUE if n2 < n1 else FALSE)
     state.on('<', n_lessthan)
 
+    def n_lessthanzero(state):
+        n1 = state.istack.pop()
+        state.istack.push(TRUE if n1 < 0 else FALSE)
+    state.on('0<', n_lessthanzero)
+
     def n_greaterthan(state):
         n1 = state.istack.pop()
         n2 = state.istack.pop()
         state.istack.push(TRUE if n2 > n1 else FALSE)
     state.on('>', n_greaterthan)
+
+    def n_greaterthanzero(state):
+        n1 = state.istack.pop()
+        state.istack.push(TRUE if n1 > 0 else FALSE)
+    state.on('0>', n_greaterthanzero)
     
     def n_and(state):
         n1 = state.istack.pop()
@@ -104,12 +129,20 @@ def ons(state):
         state.istack.push(n1)
     state.on('dup', n_dup)
     
+    def n_2dup(state):
+        n1 = state.istack.pop()
+        n2 = state.istack.peek()
+        state.istack.push(n1)
+        state.istack.push(n2)
+        state.istack.push(n1)
+    state.on('2dup', n_2dup)
+    
     def n_over(state):
         n1 = state.istack.pop()
         n2 = state.istack.pop()
-        state.stac.push(n2)
-        state.stac.push(n1)
-        state.stac.push(n2)
+        state.istack.push(n2)
+        state.istack.push(n1)
+        state.istack.push(n2)
     state.on('over', n_over)
     
     def n_rot(state):
@@ -166,12 +199,6 @@ def ons(state):
     state.parse_text(': cells 1 * ;')
     state.parse_text(': cr 10 emit ;')
     state.parse_text(': space 32 emit ;')
-    state.parse_text(': 0= 0 = ;')
-    state.parse_text(': 0< 0 < ;')
-    state.parse_text(': 0> 0 > ;')
-    state.parse_text(': 2dup over over ;')
-    state.parse_text(': 1+ 1 + ;')
-    state.parse_text(': 1- 1 - ;')
     state.parse_text(': 2+ 2 + ;')
     state.parse_text(': 2- 2 - ;')
     state.parse_text(': 2* 2 * ;')
